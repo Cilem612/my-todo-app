@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My To-Do App</title>
+    <style>
+        /* Ana stil */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* Form stili */
+        .add-task-form {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        
+        .add-task-form input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .add-task-form input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .add-task-form button {
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .add-task-form button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Liste stili */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Görev tamamlandı stili */
+        li.completed {
+            border-left-color: #2ecc71;
+            background-color: #f0f0f0;
+        }
+        
+        li.completed span {
+            text-decoration: line-through;
+            color: #95a5a6;
+        }
+        
+        /* Checkbox stili */
+        input[type="checkbox"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        
+        /* Görev metni stili */
+        .task-text {
+            flex: 1;
+            font-size: 18px;
+        }
+        
+        /* Silme butonu stili */
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Boş liste durumu */
+        .empty-list {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        /* Footer stili */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to My To-Do App</h1>
+        <p>This is my first project using Flask and HTML!</p>
+        
+        <!-- Add Task Form -->
+        <form action="/" method="POST" class="add-task-form">
+            <input type="text" name="task" placeholder="Enter a new task" required>
+            <button type="submit">Add Task</button>
+        </form>
+        
+        <!-- Task List -->
+        <ul>
+            {% if tasks %}
+                {% for task in tasks %}
+                <li class="{% if task.done %}completed{% endif %}">
+                    <!-- Toggle checkbox -->
+                    <form action="/toggle" method="POST" style="display:inline;">
+                        <input type="hidden" name="task" value="{{ task.name }}">
+                        <input type="checkbox" onchange="this.form.submit()" {% if task.done %}checked{% endif %}>
+                    </form>
+                    
+                    <!-- Task name -->
+                    <span class="task-text">
+                        {{ task.name }}
+                    </span>
+                    
+                    <!-- Delete button -->
+                    <form action="/delete" method="POST" style="display:inline;">
+                        <input type="hidden" name="task" value="{{ task.name }}">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </li>
+                {% endfor %}
+            {% else %}
+                <div class="empty-list">No tasks yet. Add a task to get started!</div>
+            {% endif %}
+        </ul>
+    </div>
+    
+    <div class="footer">
+        <p>© 2025 My To-Do App | Created with Flask and HTML</p>
+    </div>
+</body>
+</html>
